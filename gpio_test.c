@@ -13,6 +13,21 @@
 #include <linux/sched.h>
 #include <linux/interrupt.h>
 
+
+
+#include <linux/init.h>
+#include <linux/printk.h>
+#include <linux/version.h>
+#include <linux/sizes.h>
+#include <linux/timer.h>
+
+#define GPIO_PWM_MAJOR 18
+
+// First and last GPIO port numbers for the Raspberry Pi 2
+#define FIRST_GPIO_PORT 2
+#define LAST_GPIO_PORT 27
+#define RPI_GPIO_OUT 18
+
 // Sortie sur broche 18 (GPIO 24)
 #define RPI_GPIO_OUT 24
 
@@ -61,6 +76,54 @@ struct gpio_data_mode {
 #define PIN_RESERVED 	1 	// reserved pins for system use
 #define PIN_FREE 		0 	// available pins for request
 #define PIN_ARRAY_LEN 32
+
+
+ssize_t gpio_pwm_open(struct inode *inode, struct file *file) {
+    printk(KERN_INFO "Opening gpio_pwm_module...\n");
+    return 0;
+}
+
+ssize_t gpio_pwm_release(struct inode *inode, struct file *file) {
+    printk(KERN_INFO "Releasing gpio_pwm_module...\n");
+    return 0;
+}
+
+static struct timer_list timer_period;
+static struct timer_list timer_duty;
+unsigned long time_duty = (HZ >> 3);
+unsigned long time_period = (HZ >> 2);
+int value = 1;
+int pwm = 0;
+
+
+
+struct file_operations fops = {
+    .open = gpio_pwm_open,
+    .release = gpio_pwm_release,
+};
+
+
+
+
+static void period_function (unsigned long unused)
+{
+  if(pwm==1){
+     value = 1;
+     gpio_set_value(RPI_GPIO_OUT, value);
+     mod_timer(& timer_duty,jiffies+ time_duty);
+     mod_timer(& timer_period,jiffies+ time_period);
+  }
+}
+
+static void duty_function (unsigned long unused)
+{
+  if(pwm==1){
+     value = 0;
+     gpio_set_value(RPI_GPIO_OUT, value);
+  }
+}
+
+
 
 static int rpigpio_open(struct inode *inode, struct file *filp);
 static int rpigpio_release(struct inode *inode, struct file *filp);
