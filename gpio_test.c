@@ -26,7 +26,6 @@
 // First and last GPIO port numbers for the Raspberry Pi 2
 #define FIRST_GPIO_PORT 2
 #define LAST_GPIO_PORT 27
-#define RPI_GPIO_OUT 18
 
 // Sortie sur broche 18 (GPIO 24)
 #define RPI_GPIO_OUT 24
