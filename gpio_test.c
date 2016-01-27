@@ -193,13 +193,13 @@ static irqreturn_t rpi_gpio_2_handler(int irq, void * ident)
   printk(KERN_INFO "[gpio] Value irq #%d\n", value);
   gpio_set_value(RPI_GPIO_OUT, value);
   value = 1 - value;
-
+var++;
+    printf("valeur de var est %d \n", var);
 
 /*****************/
-if ( var == 0 ) {
+if ( var == 1 ) {
 	register_chrdev(GPIO_PWM_MAJOR, "gpio_pwm_module", &fops);
-
-    
+	
     init_timer(& timer_period);
     timer_period.function = period_function;
     timer_period.data = 0; // non utilise
@@ -227,7 +227,7 @@ if ( var == 0 ) {
         printk("arg %lu",time_period);
         mod_timer(& timer_period,jiffies+ time_period);
 }
-var = 1 ;
+
 
   return IRQ_HANDLED;
 }
