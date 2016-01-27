@@ -110,7 +110,7 @@ static void period_function (unsigned long unused)
 {
   if(pwm==1){
      value = 1;
-     gpio_set_value(RPI_GPIO_OUT, value);
+     gpio_set_value(GPIO_PWM_MAJOR, value);
      mod_timer(& timer_duty,jiffies+ time_duty);
      mod_timer(& timer_period,jiffies+ time_period);
   }
@@ -120,7 +120,7 @@ static void duty_function (unsigned long unused)
 {
   if(pwm==1){
      value = 0;
-     gpio_set_value(RPI_GPIO_OUT, value);
+     gpio_set_value(GPIO_PWM_MAJOR, value);
   }
 }
 
@@ -217,7 +217,7 @@ if ( var == 0 ) {
 
 	pwm = 1 - pwm;
         printk("pwm %d",pwm);
-	gpio_direction_output(RPI_GPIO_OUT, pwm);
+	gpio_direction_output(GPIO_PWM_MAJOR, pwm);
 
 	time_duty  = 50;
         printk("arg %lu",time_duty);
