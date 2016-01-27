@@ -94,6 +94,7 @@ unsigned long time_duty = (HZ >> 3);
 unsigned long time_period = (HZ >> 2);
 int value = 1;
 int pwm = 0;
+int var = 0 ;
 
 
 
@@ -196,7 +197,8 @@ static irqreturn_t rpi_gpio_2_handler(int irq, void * ident)
 
 
 /*****************/
-register_chrdev(GPIO_PWM_MAJOR, "gpio_pwm_module", &fops);
+if ( var == 0 ) {
+	register_chrdev(GPIO_PWM_MAJOR, "gpio_pwm_module", &fops);
 
     
     init_timer(& timer_period);
@@ -225,6 +227,8 @@ register_chrdev(GPIO_PWM_MAJOR, "gpio_pwm_module", &fops);
  	time_period = 100;
         printk("arg %lu",time_period);
         mod_timer(& timer_period,jiffies+ time_period);
+}
+var = 1 ;
 
   return IRQ_HANDLED;
 }
