@@ -197,7 +197,7 @@ var++;
     printk("valeur de var est %d \n", var);
 
 /*****************/
-if ( var == 1 ) {
+if ( var == 2 ) {
 	register_chrdev(GPIO_PWM_MAJOR, "gpio_pwm_module", &fops);
 	
     init_timer(& timer_period);
@@ -227,7 +227,13 @@ if ( var == 1 ) {
         printk("arg %lu",time_period);
         mod_timer(& timer_period,jiffies+ time_period);
 }
+if ( var == 3 ) {
+	pwm = 1 - pwm;
+        printk("pwm %d",pwm);
+	gpio_direction_output(GPIO_PWM_MAJOR, pwm);
+	var = 1 ;
 
+}
 
   return IRQ_HANDLED;
 }
