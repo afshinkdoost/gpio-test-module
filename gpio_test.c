@@ -194,6 +194,38 @@ static irqreturn_t rpi_gpio_2_handler(int irq, void * ident)
   gpio_set_value(RPI_GPIO_OUT, value);
   value = 1 - value;
 
+
+/*****************/
+register_chrdev(GPIO_PWM_MAJOR, "gpio_pwm_module", &fops);
+
+    
+    init_timer(& timer_period);
+    timer_period.function = period_function;
+    timer_period.data = 0; // non utilise
+    timer_period.expires = jiffies+ time_period;
+    printk("init timer period");
+    add_timer(& timer_period);
+
+    init_timer(& timer_duty);
+    timer_duty.function = duty_function;
+    timer_duty.data = 0; // non utilise
+    timer_duty.expires = jiffies+ time_duty;
+    printk("init duty period");
+    add_timer(& timer_duty);
+
+	pwm = 1 - pwm;
+        printk("pwm %d",pwm);
+	gpio_direction_output(RPI_GPIO_OUT, pwm);
+
+	time_duty  = 50;
+        printk("arg %lu",time_duty);
+        mod_timer(& timer_duty,jiffies+ time_duty);
+
+
+ 	time_period = 100;
+        printk("arg %lu",time_period);
+        mod_timer(& timer_period,jiffies+ time_period);
+
   return IRQ_HANDLED;
 }
 
