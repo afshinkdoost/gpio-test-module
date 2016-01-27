@@ -194,7 +194,7 @@ static irqreturn_t rpi_gpio_2_handler(int irq, void * ident)
   gpio_set_value(RPI_GPIO_OUT, value);
   value = 1 - value;
 var++;
-    printf("valeur de var est %d \n", var);
+    printk("valeur de var est %d \n", var);
 
 /*****************/
 if ( var == 1 ) {
